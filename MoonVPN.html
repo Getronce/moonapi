@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MoonVPN</title>
+
+    <link rel="icon" href="moonvpn-icon.png" type="image/png">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        @font-face {
+        font-family: "Montserrat";
+        src: url("Montserrat.ttf");
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            position: relative;
+            overflow-x: hidden; 
+            overflow-y: auto;
+            transition: background-color 0.3s, color 0.3s; 
+            color: black; 
+        }
+
+        .dark-theme {
+            background-color: black;
+            color: white;
+        }
+
+        .container {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            max-width: 1920px;
+        }
+
+        .header {
+            z-index: 10;
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            right: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;  
+        }
+
+        .logo img {
+            height: 80px;
+            transition: filter 0.3s; 
+            cursor: pointer;
+            margin-top: 3%;
+        }
+
+        .menu {
+            font-size: 32px;
+            cursor: pointer;
+            padding: 0 10px; 
+            margin-left: auto; 
+        }
+
+        .menu a {
+            text-decoration: none; 
+            color: inherit; 
+            transition: color 0.3s; 
+        }
+
+        .dark-theme .menu a {
+            color: white; 
+        }
+
+        .theme-toggle img {
+            width: 55px; 
+            transition: filter 0.3s; 
+            cursor: pointer; 
+        }
+
+        .menu img {
+            width: 50px; 
+            transition: filter 0.3s; 
+            cursor: pointer; 
+            margin-right: 10px;
+            margin-top: 5px;
+        }
+
+        .dark-theme .logo img,
+        .dark-theme .telegram img,
+        .dark-theme .flags img,
+        .dark-theme .theme-toggle img,
+        .dark-theme .menu img {
+            filter: invert(1); 
+        }
+
+        .main-content {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .moon-img {
+            display: flex;
+            justify-content: center;
+            width: 100%;
+            margin-bottom: 5px;
+        }
+
+        .moon-img img {
+            width: 425px; 
+            height: 425px;
+            border-radius: 50%; /* Полностью круглая форма */
+            
+            filter: drop-shadow(0 0 50px #000000);
+            transition: drop-shadow 0.3s ease, transform 0.3s ease;
+            border: none; /* Убираем любые границы */
+        }
+        .dark-theme .moon-img img {
+            filter: drop-shadow(0 0 50px #ffffff); /* Инвертированное свечение для темной темы */
+        }
+
+        .moon-img img:hover {
+            transform: scale(1.01); /* Небольшое увеличение при наведении */
+            filter: drop-shadow(0 0 100px #000000); /* Усиленное свечение */
+        }
+        .dark-theme .moon-img img:hover {
+            transform: scale(1.01); /* Небольшое увеличение при наведении */
+            filter: drop-shadow(0 0 100px #ffffff); /* Усиленное свечение */
+
+        }
+
+        .connect-btn {
+            font-size: 36px;
+            margin-top: 4.5%;
+            margin-bottom: 6%;
+            cursor: pointer; 
+            padding: 10px 30px;
+            border: 2px solid black;
+            border-radius: 50px;
+            transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+            text-align: center;
+            position: relative; /* Зафиксируем позицию кнопки */
+        }
+
+        .dark-theme .connect-btn {
+            border-color: white;
+        }
+
+        .connect-btn.connected {
+            background-color: black;
+            color: white;
+            border-color: black;
+        }
+
+        .dark-theme .connect-btn.connected {
+            background-color: white;
+            color: black;
+            border-color: white;
+        }
+
+        .connect-btn:hover {
+            background-color: black;
+            color: white;
+        }
+
+        .dark-theme .connect-btn:hover {
+            background-color: white;
+            color: black;
+        }
+
+        .connect-btn.connected:hover {
+            background-color: white;
+            color: black;
+        }
+
+        .dark-theme .connect-btn.connected:hover {
+            background-color: black;
+            color: white;
+        }
+
+        .connect-btn.loading {
+            background-color: transparent;
+            color: inherit;
+            border-color: inherit;
+            animation: pulse 1.5s infinite;
+        }
+
+        .dark-theme .connect-btn.loading {
+            background-color: transparent; 
+            color: inherit;
+            border-color: inherit;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+        }
+
+        .flags {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .flags img {
+            width: 60px;
+            height: 43px;
+            cursor: pointer;
+            border-radius: 10%;
+            transition: filter 0.3s, opacity 0.3s;
+        }
+
+        .flags img.disabled {
+            opacity: 0.5;
+            cursor: none;
+            pointer-events: none;
+        }
+
+        .flags img.disabled2 {
+            opacity: 0.5;
+            cursor: none;
+            pointer-events: none;
+        }
+
+        .flags img.hidden {
+            opacity: 0;
+            display: none;
+            pointer-events: none;
+        }
+
+        .selected-flag {
+            border: 3px solid black;
+            border-radius: 10%; 
+            margin-bottom: 29px;
+        }
+
+        .dark-theme .selected-flag {
+            border-color: white;
+        }
+
+        .telegram {
+            position: absolute;
+            bottom: 20px;
+            right: 40px;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+        }
+
+        .telegram img {
+            width: 30px;
+            margin-right: 10px;
+            transition: filter 0.3s;
+        }
+
+        hr {
+            visibility: hidden;
+            width: 100%; /* Оставляем ширину неизменной */
+            border: none;
+            height: 1px;
+            background-color: #000000;
+            margin-top: 5%; /* Верхний отступ */
+            margin-bottom: 0%; /* Нижний отступ */
+            transition: margin 0.3s, background-color 0.3s;
+        }
+
+        .dark-theme hr {
+            background-color: #444; 
+        }
+
+        .dark-theme .flags img {
+            filter: none; 
+        }
+
+        /* Для экранов шириной меньше 576px */
+        @media (max-width: 576px) {
+        .logo img {
+            height: 60px; /* Уменьшаем логотип */
+            margin-top: 5px;
+        }
+
+        .menu {
+            font-size: 24px; /* Уменьшаем размер текста меню */
+        }
+
+        .menu img {
+            width: 40px; 
+        }
+
+        .theme-toggle img {
+            width: 40px; /* Уменьшаем значок настройки */
+        }
+
+        .moon-img img {
+            width: 270px; /* Уменьшаем размер луны */
+            height: 270px;
+        }
+
+        .connect-btn {
+            font-size: 18px; /* Уменьшаем текст кнопки */
+            padding: 8px 20px; /* Уменьшаем внутренние отступы */
+        }
+
+        .flags img {
+            width: 50px; /* Уменьшаем размеры флагов */
+            height: 33px;
+            margin-bottom: 20px; /* Увеличиваем отступ между флагами */
+        }
+
+        .telegram {
+            bottom: 10px; /* Поднимаем ссылку Telegram выше */
+            right: 20px; /* Уменьшаем отступ справа */
+        }
+
+        hr {
+            visibility: hidden;
+        }
+        }
+
+        /* Для экранов шириной меньше 1080px */
+        @media (min-width: 576px) and (max-width: 1500px) {
+        .logo img {
+            height: 80px; /* Уменьшаем логотип */
+            margin-top: 10px;
+        }
+
+        .menu {
+            font-size: 35px; /* Уменьшаем текст меню */
+        }
+
+        .menu img {
+            width: 60px; 
+        }
+
+        .theme-toggle img {
+            width: 60px; /* Немного уменьшаем значок настройки */
+        }
+
+        .moon-img img {
+            width: 400px; /* Уменьшаем луну */
+            height: 400px;
+        }
+
+        .connect-btn {
+            font-size: 35px; /* Уменьшаем текст кнопки */
+            padding: 12px 25px; /* Уменьшаем внутренние отступы */
+        }
+
+        .flags img {
+            width: 60px; /* Уменьшаем размеры флагов */
+            height: 42px;
+            margin-bottom: 30px; /* Оставляем немного места между флагами */
+        }
+
+        .telegram {
+            bottom: 15px; /* Немного выше ссылка Telegram */
+            right: 30px; /* Сужаем отступ справа */
+        }
+
+        hr {
+            visibility: hidden;
+        }
+        }
+    </style>
+</head>
+<body onload="initPage()">
+    
+    <div class="container">
+        <div class="header">
+            <div class="logo" onclick="reloadPage()">
+                <img src="moonvpn-logo.png" alt="MoonVPN Logo"> 
+            </div>
+            <div class="menu" id="menu">
+            </div>
+            <div class="theme-toggle" onclick="toggleTheme()">
+                <img src="setting-icon.png" alt="Settings Icon"> 
+            </div>
+        </div>
+
+        <hr> 
+
+        <div class="main-content">
+            <div class="moon-img">
+                <img src="moon.png" alt="Moon Image" id="moon-image"> 
+            </div>
+
+            <div class="connect-btn" onclick="connect(this)">
+                Выберите сервер подключения
+            </div>
+
+            <div class="flags">
+                <img id="Франция" src="france.png" alt="France Flag" class="flag disabled" onclick="selectFlag(this)"> 
+                <img id="Великобритания" src="uk.png" alt="UK Flag" class="flag disabled" onclick="selectFlag(this)">
+                <img id="США" src="usa.png" alt="USA Flag" class="flag disabled" onclick="selectFlag(this)">
+            </div>
+        </div>
+
+        <div class="telegram">
+            <img src="telegram-icon.png" alt="Telegram Icon"> 
+                <a href="https://t.me/Regrettab1e" target="_blank" style="text-decoration: none; color: inherit;">
+                Telegram
+                </a>
+        </div>
+    </div>
+
+    <script>
+        let selectedFlag = null;
+
+        function initPage() {
+            checkAuthStatus();  
+            loadTheme();    
+            loadSubscriptions();     
+        }
+
+        function checkAuthStatus() {
+            const userEmail = localStorage.getItem('userEmail');
+            const authContainer = document.getElementById('menu');
+
+            if (userEmail) {
+                // Если пользователь авторизован, показываем картинку профиля с ссылкой на личный кабинет
+                const profileLink = document.createElement('a');
+                profileLink.href = 'account.html'; // Ссылка на личный кабинет
+                const profileImg = document.createElement('img');
+                profileImg.src = 'acc.png'; // Картинка профиля
+                profileImg.alt = 'Профиль';
+
+                profileLink.appendChild(profileImg);
+                authContainer.innerHTML = ''; // Очищаем контейнер, если нужно
+                authContainer.appendChild(profileLink);
+            } else {
+                // Если пользователь не авторизован, показываем текст "Вход/Регистрация"
+                authContainer.innerHTML = '<a href="login.html">Вход/Регистрация</a>';
+            }
+        }
+
+        function toggleTheme() {
+            document.body.classList.toggle('dark-theme');
+            localStorage.setItem('theme', document.body.classList.contains('dark-theme') ? 'dark' : 'light');
+        }
+
+        function loadTheme() {
+            if (localStorage.getItem('theme') === 'dark') {
+                document.body.classList.add('dark-theme');
+            }
+        }
+
+        function loadSubscriptions() {
+    const userEmail = localStorage.getItem('userEmail');
+    if (!userEmail) {
+        return; // Если пользователь не авторизован
+    }
+
+    const userSubscriptions = JSON.parse(localStorage.getItem(`subscriptions_${userEmail}`)) || [];
+
+    // Для каждого флага проверяем, можно ли его активировать
+    const allFlags = document.querySelectorAll('.flags img');
+    allFlags.forEach(flag => {
+        const flagId = flag.id; // Используем id флага, например, "france", "uk", "usa"
+        
+        // Проверяем, есть ли этот сервер в подписке
+        if (!userSubscriptions.includes(flagId)) {
+            // Если сервер не в подписке, делаем флаг недоступным
+            flag.classList.add('disabled');
+            flag.style.pointerEvents = 'none'; // Блокируем взаимодействие с флагом
+        } else {
+            // Если сервер в подписке, флаг доступен для клика
+            flag.classList.remove('disabled');
+            flag.style.pointerEvents = 'auto'; // Разблокируем флаг
+        }
+    });
+}
+
+
+
+        function connect(button) {
+            const flags = document.querySelectorAll('.flags img');
+            if (button.innerText === "Выберите сервер подключения") {
+                return;
+            }
+
+            if (button.innerText === "ПОДКЛЮЧИТЬСЯ") {
+                button.classList.add('loading');
+                button.innerText = "Подключение...";
+
+                flags.forEach(flag => {
+                    if (!flag.classList.contains('selected-flag')) {
+                        flag.classList.add('hidden');
+                        flag.classList.add('disabled2');
+                    }
+                });
+
+                setTimeout(() => {
+                    button.classList.remove('loading');
+                    button.classList.add('connected');
+                    button.innerText = "ПОДКЛЮЧЕНО";
+                }, 5000);
+            } else if (button.innerText === "ПОДКЛЮЧЕНО") {
+                button.classList.add('loading');
+                button.innerText = "Отключение...";
+
+                setTimeout(() => {
+                    button.classList.remove('loading');
+                    button.classList.remove('connected');
+                    button.innerText = "ПОДКЛЮЧИТЬСЯ";
+
+                    flags.forEach(flag => {
+                        flag.classList.remove('hidden');
+                        flag.classList.remove('disabled2');
+                    });
+                }, 3000);
+            }
+        }
+
+        function selectFlag(flag) {
+            const btn = document.querySelector('.connect-btn');
+            
+                if (btn.innerHTML === "ПОДКЛЮЧЕНО") {
+                    return;
+                }
+                if (btn.innerHTML === "Подключение...") {
+                    return;
+                }
+                if (btn.innerHTML === "Отключение...") {
+                    return;
+                }
+            if (flag.classList.contains('disabled2')) {
+                return; // Не даем выбрать флаг, если он не доступен
+            }
+
+            document.querySelectorAll('.flags img').forEach(f => {
+                f.classList.remove('selected-flag');
+            });
+            flag.classList.add('selected-flag');
+            selectedFlag = flag;
+
+            const button = document.querySelector('.connect-btn');
+            button.innerText = "ПОДКЛЮЧИТЬСЯ";
+        }
+
+        function reloadPage() {
+            location.reload();
+        }
+
+    </script>
+    
+</body>
+</html>
