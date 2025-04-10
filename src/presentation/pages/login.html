@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Вход</title>
+    <link rel="icon" href="../../../public/assets/moonvpn-icon.png" />
+    <link rel="stylesheet" href="../../../public/styles/login.css" />
+  </head>
+  <body>
+    <a href="main.html" class="logo-container">
+      <img src="../../../public/assets/moonvpn-logo.png" alt="MoonVPN Logo" />
+    </a>
+
+    <div class="main-container">
+      <div class="form-container">
+        <h2>Вход</h2>
+        <form id="login-form">
+          <input type="text" id="email" placeholder="Эл.почта" required />
+          <input type="password" id="password" placeholder="Пароль" required />
+          <button type="submit">Войти</button>
+        </form>
+        <div id="message" class="message"></div>
+        <a class="register-link" href="register.html"
+          >Нет аккаунта? Зарегистрироваться</a
+        >
+      </div>
+    </div>
+
+    <script type="module" src="../scripts/login.js" defer></script>
+  </body>
+</html>

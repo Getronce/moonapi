@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Личный кабинет | MoonVPN</title>
+    <link rel="icon" href="../../../public/assets/moonvpn-icon.png" />
+    <link rel="stylesheet" href="../../../public/styles/profile.css" />
+  </head>
+  <body>
+    <div class="container">
+      <div class="header">
+        <div class="logo">
+          <a href="main.html">
+            <img
+              src="../../../public/assets/moonvpn-logo.png"
+              alt="MoonVPN Logo"
+            />
+          </a>
+        </div>
+      </div>
+
+      <hr />
+
+      <div class="status">
+        <p>Добро пожаловать, <strong id="user-email"></strong>!</p>
+        <p>Баланс: <strong id="user-balance">0</strong> руб.</p>
+      </div>
+
+      <div class="section-title">Пополнить баланс</div>
+      <div class="server-list">
+        <div class="balance-item">
+          <h3>1000 руб</h3>
+          <button class="buy-btn" data-amount="1000">Пополнить</button>
+        </div>
+        <div class="balance-item">
+          <h3>2200 руб</h3>
+          <button class="buy-btn" data-amount="2200">Пополнить</button>
+        </div>
+        <div class="balance-item">
+          <h3>3700 руб</h3>
+          <button class="buy-btn" data-amount="3700">Пополнить</button>
+        </div>
+      </div>
+
+      <div class="section-title">Доступные сервера для подписки</div>
+      <div class="server-list">
+        <div class="server-item" id="server-france">
+          <h3>Сервер France</h3>
+          <p>Подключение: 1000 руб</p>
+          <button
+            class="buy-btn-server"
+            data-server="France"
+            data-amount="1000"
+          >
+            Подписать
+          </button>
+        </div>
+        <div class="server-item" id="server-uk">
+          <h3>Сервер UK</h3>
+          <p>Подключение: 1200 руб</p>
+          <button class="buy-btn-server" data-server="UK" data-amount="1200">
+            Подписать
+          </button>
+        </div>
+        <div class="server-item" id="server-usa">
+          <h3>Сервер USA</h3>
+          <p>Подключение: 1500 руб</p>
+          <button class="buy-btn-server" data-server="USA" data-amount="1500">
+            Подписать
+          </button>
+        </div>
+      </div>
+
+      <button class="logout-button">Выйти из аккаунта</button>
+
+      <div class="footer">
+        <p>&copy; 2024 MoonVPN. Все права защищены.</p>
+      </div>
+    </div>
+
+    <div id="modal" class="modal">
+      <div class="modal-content">
+        <h2 id="modal-title"></h2>
+        <p id="modal-message"></p>
+        <button id="modal-action-btn"></button>
+      </div>
+    </div>
+
+    <script type="module" src="../scripts/profile.js" defer></script>
+  </body>
+</html>
